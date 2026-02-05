@@ -1,0 +1,15 @@
+﻿root = true
+
+[*]
+indent_style = space
+indent_size = 4
+charset = utf-8-bom
+end_of_line = crlf
+insert_final_newline = true
+
+[*.cs]
+csharp_new_line_before_open_brace = all
+csharp_new_line_before_else = true
+dotnet_naming_rule.types_should_be_pascal_case.severity = warning
+dotnet_naming_rule.types_should_be_pascal_case.symbols = types
+dotnet_naming_rule.types_should_be_pascal_case.style = pascal_case" > .editorconfig
