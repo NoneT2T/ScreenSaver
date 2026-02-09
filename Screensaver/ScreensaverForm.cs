@@ -6,11 +6,16 @@ namespace Screensaver;
 public partial class ScreensaverForm : Form
 {
     private PointF[] snowflakes; // Позиция снежинок
+    
     private float[] speeds; // Скорость падения
+    
     private int[] sizes; // Размер снежинок
+    
     private Random random; // Рандом
+    
     private Image? snowflakeImage; // Изображение снежинки
     private Image? backgroundImage; // Фоновое изображение
+    
     private Bitmap? backBuffer; // Буфер для отрисовки
     private Graphics? bufferGraphics; // Graphics объект буфера
     
