@@ -1,4 +1,7 @@
-﻿namespace Screensaver;
+﻿using System;
+using System.Windows.Forms;
+
+namespace Screensaver;
 
 /// <summary>
 /// Код дизайнера для формы ScreensaverForm.
@@ -56,7 +59,6 @@ partial class ScreensaverForm
         TopMost = true;
         WindowState = System.Windows.Forms.FormWindowState.Maximized;
         FormClosing += ScreensaverForm_FormClosing;
-        Paint += ScreensaverForm_Paint;
         KeyDown += ScreensaverForm_KeyDown;
         MouseClick += ScreensaverForm_MouseClick;
         ResumeLayout(false);
@@ -70,14 +72,6 @@ partial class ScreensaverForm
     private void AnimationTimer_Tick(object sender, EventArgs e)
     {
         UpdateSnowflakes();
-    }
-
-    /// <summary>
-    /// Обработчик события Paint (отрисовка).
-    /// </summary>
-    private void ScreensaverForm_Paint(object sender, PaintEventArgs e)
-    {
-        DrawScene(e.Graphics);
     }
 
     /// <summary>
