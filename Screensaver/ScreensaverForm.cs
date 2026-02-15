@@ -1,3 +1,7 @@
+using System;
+using System.Drawing;
+using System.Windows.Forms;
+
 namespace Screensaver;
 
 /// <summary>
@@ -6,21 +10,15 @@ namespace Screensaver;
 public partial class ScreensaverForm : Form
 {
     private PointF[] snowflakePositions; // Позиция снежинок
-
     private float[] fallingSpeeds; // Скорость падения
-
     private int[] snowflakeSizes; // Размер снежинок
-
     private Random random; // Рандом
-
     private Image snowflakeImage; // Изображение снежинки
     private Image? backgroundImage; // Фоновое изображение
-
     private Bitmap? backBuffer; // Буфер для отрисовки
     private Graphics? bufferGraphics; // Graphics объект буфера
 
     private const int SnowflakeCount = 150; // Количество снежинок на экране
-
     private const float BaseSpeed = 0.5f; // Базовая скорость падения снежинки
     private const float MaxSpeedMultiplier = 3f; // Максимальный множитель скорости для крупных снежинок
     private const float SpeedFactor = 25f; // Коэффициент для расчёта скорости на основе размера снежинки
@@ -88,7 +86,6 @@ public partial class ScreensaverForm : Form
         const int maxInitialYOffset = 200; // Максимальное начальное смещение по Y
         const int minSnowflakeSize = 5; // Минимальный размер снежинки
         const int maxSnowflakeSize = 26; // Максимальный размер снежинки
-
         const float largeSnowflake = 15f; // Снежинки крупнее получают множитель к скорости
 
         var horizontalInterval = Width / (float)SnowflakeCount;
@@ -99,7 +96,6 @@ public partial class ScreensaverForm : Form
             var yPosition = -random.Next(minInitialYOffset, maxInitialYOffset);
 
             snowflakePositions[snowflakeIndex] = new PointF(xPosition, yPosition);
-
             snowflakeSizes[snowflakeIndex] = random.Next(minSnowflakeSize, maxSnowflakeSize);
 
             if (snowflakeSizes[snowflakeIndex] > largeSnowflake)
@@ -122,6 +118,7 @@ public partial class ScreensaverForm : Form
     private void UpdateSnowflakes()
     {
         const float maxHorizontalOffsetPerFrame = 0.5f; // Максимальное горизотальное смещение за кадр
+        
         for (var snowflakeIndex = 0; snowflakeIndex < SnowflakeCount; snowflakeIndex++)
         {
             // Двигаем снежинку
@@ -129,10 +126,8 @@ public partial class ScreensaverForm : Form
             snowflakePositions[snowflakeIndex].X += (float)((random.NextDouble() - maxHorizontalOffsetPerFrame) * maxHorizontalOffsetPerFrame);
 
             // Проверяем, достигла ли снежинка нижней границы
-            // Учитываем размер снежинки, чтобы она полностью скрывалась внизу
             if (snowflakePositions[snowflakeIndex].Y > Height + snowflakeSizes[snowflakeIndex])
             {
-                // Когда снежинка полностью ушла за нижнюю границу, сбрасываем её
                 ResetSnowflake(snowflakeIndex);
             }
 
@@ -152,6 +147,7 @@ public partial class ScreensaverForm : Form
         if (bufferGraphics != null && backBuffer != null)
         {
             bufferGraphics.Clear(Color.Black);
+            
             if (backgroundImage != null)
             {
                 bufferGraphics.DrawImage(backgroundImage, 0, 0, Width, Height);
@@ -164,7 +160,6 @@ public partial class ScreensaverForm : Form
                     var currentSnowflake = snowflakePositions[snowflakeIndex];
                     var size = snowflakeSizes[snowflakeIndex];
 
-                    // Не отрисовываем снежинки, которые уже полностью упали за границу
                     if (currentSnowflake.Y <= Height + size && currentSnowflake.Y >= -size)
                     {
                         bufferGraphics.DrawImage(snowflakeImage, currentSnowflake.X, currentSnowflake.Y, size, size);
@@ -176,7 +171,6 @@ public partial class ScreensaverForm : Form
             {
                 screenGraphics.DrawImageUnscaled(backBuffer, 0, 0);
             }
-
         }
     }
 
@@ -203,5 +197,37 @@ public partial class ScreensaverForm : Form
         backgroundImage?.Dispose();
         bufferGraphics?.Dispose();
         backBuffer?.Dispose();
+    }
+
+    /// <summary>
+    /// Обработчик таймера анимации.
+    /// </summary>
+    private void AnimationTimer_Tick(object sender, EventArgs e)
+    {
+        UpdateSnowflakes();
+    }
+
+    /// <summary>
+    /// Обработчик нажатия клавиши
+    /// </summary>
+    private void ScreensaverForm_KeyDown(object sender, KeyEventArgs e)
+    {
+        Close();
+    }
+
+    /// <summary>
+    /// Обработчик клика мыши
+    /// </summary>
+    private void ScreensaverForm_MouseClick(object sender, MouseEventArgs e)
+    {
+        Close();
+    }
+
+    /// <summary>
+    /// Обработчик закрытия формы
+    /// </summary>
+    private void ScreensaverForm_FormClosing(object sender, FormClosingEventArgs e)
+    {
+        CleanupResources();
     }
 }
